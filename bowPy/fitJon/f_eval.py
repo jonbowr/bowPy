@@ -29,9 +29,6 @@ def fwhm(fit,xx,param=[],return_locs = False):
       haf_up = np.nan
       haf_down = np.NaN
 
-      # return(np.nan,[np.nan]*3)
-
-
     if return_locs:
       return haf_up - haf_down,[haf_down,haf_up,xp]
     else:

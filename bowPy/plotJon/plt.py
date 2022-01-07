@@ -66,13 +66,15 @@ def hist2d(x,y, bins = [], weights = None, density = False,
 
 
 
-def density_scatter( x , y, ax = None, sort = True, bins = 20,weights = None, **kwargs ):
+def density_scatter( x , y, ax = None, sort = True, bins = 20,
+                            weights = None,log_color = False, colorbar = False,**kwargs ):
+    from scipy.interpolate import interpn
     """
     Scatter plot colored by 2d histogram
     """
     if ax is None :
         fig , ax = plt.subplots()
-    data , x_e, y_e = np.histogram2d( x, y, bins = bins,weights = weights)
+    data , x_e, y_e = np.histogram2d( x, y, bins = bins,weights = weights,density = True)
     z = interpn( ( 0.5*(x_e[1:] + x_e[:-1]) , 0.5*(y_e[1:]+y_e[:-1]) ) , data , 
                 np.vstack([x,y]).T , method = "splinef2d", bounds_error = False )
 
@@ -81,5 +83,9 @@ def density_scatter( x , y, ax = None, sort = True, bins = 20,weights = None, **
         idx = z.argsort()
         x, y, z = x[idx], y[idx], z[idx]
 
-    ax.scatter( x, y, c=z, **kwargs )
+
+    from matplotlib.colors import LogNorm
+    im = ax.scatter( x, y, c=z,norm=(LogNorm() if log_color else None), **kwargs )
+    if colorbar:
+        plt.colorbar(im,ax = ax,label = 'dC/dx/dy')
     return ax

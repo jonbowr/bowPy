@@ -27,8 +27,9 @@ class Jonda:
 
 
         if type(func) == str: 
-            self.func = fc.funcs[func]
+            self.func = fc.funcs[func]['f']
             self.p_i = fc.p0_xy[func]
+            self.p0_xy = fc.p0_xy[func]
         else:
             self.func = func
 
@@ -65,15 +66,27 @@ class Jonda:
         else:
             return(xy,err,xb)
 
-    def fit_xy(self,p_i = None,use_err = True,args = {}):
+
+    def fit_xy(self,p_i = None,use_err = True,args = {},fy = lambda x: x):
         if p_i == None:
-            p_i = self.p_i(*self.xy)
+            # p_i = self.p_i(*self.xy)
+            try:
+                params,covs = cf(self.func,self.xy[0],fy(self.xy[1]),**args)
+                self.p0 = params
+                self.covs = covs
+                self.f = self.func
+            except:
+                print('Curve Fit Failed')
+                params = [np.nan]*len(self.p0)
+                covs = None
+                # self.f = lambda x: np.nan
+                self.f = self.func
         if use_err:
             nano = ~np.sum(np.isnan(np.concatenate([self.xy,self.err.reshape(1,-1)])),axis = 0).flatten().astype(bool)
             params,covs = cf(self.func,*self.xy[:,nano],p0 = p_i,sigma = self.err[nano],**args)
-        self.p0 = params
-        self.covs = covs
-        self.f = self.func
+            self.p0 = params
+            self.covs = covs
+            self.f = self.func
 
     def interp_xy(self, kind = 'linear',sigma = 1):
         self.f = interp1d(self.xy[0,:],

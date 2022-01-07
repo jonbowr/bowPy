@@ -13,7 +13,7 @@ def log_gauss(x,a=1,sigma=1,mu=0):
 
 def tanh(xl,a = 1,x0 =1,sigma =10):
     # x = (xl/np.nanmax(xl)- x0/np.nanmax(xl))*2*sigma
-    x = (xl- x0)*2*sigma/np.nanmax(xl)
+    x = (xl- x0)*2*sigma#/np.nanmax(xl)
     y = a*(np.tanh(x)+1)/2
     return(y)
 
@@ -41,8 +41,8 @@ def poisson(x1,a = 1,b=1,c=0,k=1):
     # norm = k**k*np.exp(-k)/np.math.factorial(k)
     return(a*(x*k**2)**k*np.exp(-x*k**2)/np.math.factorial(k))
 
-def kappa_4(x,h = .1,k = 0,l = 0,scale =1,a = 1):
-    return(a*kappa4.pdf((x-l)/scale,h,k))
+def kappa_4(x,h = .1,k = 0,l = 0,scale =1,a = 1,y0 = 0):
+    return(a*kappa4.pdf((x-l)/scale,h,k)+y0)
 
 def kappa_3(x,h = .1,k = 0,l = 0,scale =1,a = 1):
     v = kappa3._pdf(x,h,k,l,scale)
@@ -50,6 +50,9 @@ def kappa_3(x,h = .1,k = 0,l = 0,scale =1,a = 1):
 
 def power_law(x,a = 1,k = -1,y0 = 0,x0 = 0):
     return(a*(x-x0)**k+y0)
+
+def linear(x,m=1,b=1):
+    return(m*x+b)
 
 
 # funcs = {
@@ -155,6 +158,14 @@ funcs = {
                     'params':['a','k','y0','x0'],
                     'reference':'',
                 },
+            'linear':
+               {
+                    'f':linear,
+                    'name':'Linear',
+                    'latex':r'$y = m*x+b$',
+                    'params':['m','b'],
+                    'reference':'',
+                },
         }
 
 # p0 = {
@@ -173,7 +184,7 @@ funcs = {
 # integrate with above db
 p0_xy = {
         'fx':lambda x,y: [],
-      'gauss': lambda x,y: [np.max(y),np.average(x,weights=y),np.std_w(x,y)],
+      'gauss': lambda x,y: [np.max(y),np.average(x,weights=y),np.average(x,weights=y)],
       'log_gauss':lambda x,y: None,
       'tanh':None,
       'log_gauss_flip': lambda x,y: [np.max(y),np.average(x,weights=y),np.nanmin(x),np.nanmax(x)],
@@ -184,9 +195,10 @@ p0_xy = {
                                 np.std_w(x,y)],
       'skew_gauss':lambda x,y: None,
       'skew_trunk_gauss':lambda x,y: None,
-      'kappa4':lambda x,y: [.1,-.1,np.average(x,weights=y),1,np.max(y)],
+      'kappa4':lambda x,y: [.1,-.1,np.average(x,weights=y),1,np.max(y),0],
       'kappa3':lambda x,y: [-.1,np.average(x,weights=y),1,np.max(y),0],
       'power_law':lambda x,y: [1]*4,
+      'linear':lambda x,y: [1,0],
       }
 
 

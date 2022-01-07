@@ -3,12 +3,9 @@ import numpy as np
 
 def sym_logspace(start,stop,num,thresh=1):
     rng = abs(stop-start)
-    # if abs(start)>abs(stop):
 
     sfrac = int(np.log(abs(start))/np.log(rng)*num)
     stfrac = int(np.log(abs(stop))/np.log(rng)*num)
-
-    # print(start/abs(start)*np.geomspace(thresh,abs(start),sfrac))
     if start <0 and stop >0:
         return(np.sort(np.concatenate([
                         start/abs(start)*np.geomspace(thresh,abs(start),sfrac),
@@ -35,7 +32,6 @@ def find_nearest(array,value):
         return idx-1
     else:
         return idx
-
 
 def std_w(x,w):
     m = np.average(x,weights=w)

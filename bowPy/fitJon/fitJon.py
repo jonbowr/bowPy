@@ -117,7 +117,7 @@ def bin_fit(data,weights = None,fittype = 'gauss',bino= 50,
           f.hist = {'x':x,'y':y,'err':y_err}
           # return(f)
           # return(func(e_funcs[fittype],parms[0],parms[1]),[x,y,y_err])
-        except RuntimeError:
+        except:
           # print('bad_stuffs')
           # return(None,[x,y,y*err])
           f = func(e_funcs[fittype],np.ones(len(e_guess[fittype]))*np.nan,np.ones([len(e_guess[fittype])]*2)*np.nan)
