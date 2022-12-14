@@ -35,8 +35,12 @@ def fwhm(fit,xx,param=[],return_locs = False):
       return(haf_up-haf_down)
 
 
-def peak(fit,ex,param = []):
-      return(ex[np.nanargmax(fit(ex,*param))])
+def peak(fit,ex,param = [],peaknness = True):
+      from scipy.signal import find_peaks
+      y = fit(ex,*param)
+      peaks_ind = find_peaks(y)[0]
+      m_peak_ind = peaks_ind[np.argmax(y[peaks_ind])]
+      return(ex[m_peak_ind])
 
 
 evals = {

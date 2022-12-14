@@ -6,11 +6,17 @@ def legend_loc(fig,ax,label = '',location = 'rightside_outside',size = '10%',pad
 
     leg = ax.legend()
 
-    w = leg.get_window_extent(renderer = fig.canvas.get_renderer()).width/fig.get_window_extent().width
-    leg.remove()
+    if location == 'right_outside':
+        w = leg.get_window_extent(renderer = fig.canvas.get_renderer()).width/fig.get_window_extent().width
+        leg.remove()
+        fig.subplots_adjust(right=1-w)
+        cax = fig.add_axes([1-w, 0, 1, .98])
+    elif location =='below':
+        w = leg.get_window_extent(renderer = fig.canvas.get_renderer()).height/fig.get_window_extent().height
+        leg.remove()
+        fig.subplots_adjust(bottom=w)
+        cax = fig.add_axes([0, 0, 1, w])
 
-    fig.subplots_adjust(right=1-w)
-    cax = fig.add_axes([1-w, 0, 1, .98])
     cax.set_axis_off()
 
     # get handles

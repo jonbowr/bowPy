@@ -93,11 +93,12 @@ class Jonda:
                           gf(self.xy[1,:],sigma = sigma),
                           kind = kind,bounds_error = False)
         self.p0 = []
+        return(self)
 
 
     def find_xy(self, ex = None,find = 'fwhm'):
         from .fitJon.f_eval import evals
         if ex == None: 
-            ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*10)
+            ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*100)
         return(evals[find](self.f,ex,self.p0))
 
