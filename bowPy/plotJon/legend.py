@@ -5,15 +5,18 @@ from matplotlib import container
 def legend_loc(fig,ax,label = '',location = 'rightside_outside',size = '10%',pad = .05,loc = 'upper left'):
 
     leg = ax.legend()
+    figsize = fig.get_size_inches()
 
     if location == 'right_outside':
         w = leg.get_window_extent(renderer = fig.canvas.get_renderer()).width/fig.get_window_extent().width
         leg.remove()
+        fig.set_figwidth(figsize[0]*(1+w))
         fig.subplots_adjust(right=1-w)
         cax = fig.add_axes([1-w, 0, 1, .98])
     elif location =='below':
         w = leg.get_window_extent(renderer = fig.canvas.get_renderer()).height/fig.get_window_extent().height
         leg.remove()
+        fig.set_figheight(figsize[1]*(1+w))
         fig.subplots_adjust(bottom=w)
         cax = fig.add_axes([0, 0, 1, w])
 
