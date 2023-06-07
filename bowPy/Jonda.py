@@ -95,10 +95,22 @@ class Jonda:
         self.p0 = []
         return(self)
 
-
-    def find_xy(self, ex = None,find = 'fwhm'):
+    def find_xy(self, find = 'fwhm',ex = None):
         from .fitJon.f_eval import evals
         if ex == None: 
             ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*100)
         return(evals[find](self.f,ex,self.p0))
+
+    def get_fxy(self,ex = None):
+        if ex == None: 
+            ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*100)
+        return(ex,self(ex))        
+
+    def show(self,fig = None,ax = None):
+        from matplotlib import pyplot as plt
+        if ax == None:
+            fig,ax = plt.subplots()
+        lin = ax.plot(*self.xy)[0]
+        if self.f != None:
+            ax.plot(*self.get_fxy(),color = lin.get_color(),label = 'Fit')
 
