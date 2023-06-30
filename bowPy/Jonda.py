@@ -24,6 +24,7 @@ class Jonda:
         self.p0 = p0
         self.covs = covs
         self.f = None
+        self.cnt = None
 
 
         if type(func) == str: 
@@ -38,12 +39,19 @@ class Jonda:
             return(self.f(x,*self.p0))
         else: 
             return(self.f(x,*p0))
+    def __str__(self):
+        return('bowPy.Jonda:\n\tfit:%s,p0:%s'%(str(self.f),str(self.p0)))
 
-    def bin_data(self,inplace = True,
+    def __repr__(self):
+        return(str(self))
+
+    def bin_data(self,bins= None,inplace = True,
                             params = {},
                                 norm_binwidth = True,
                                 max_norm = True,
                                     cnt_err = True):
+        if bins != None:
+            self.bins = bins
         h,xb = np.histogram(self.data,bins = self.bins,
                             weights = self.weights,**params)
         
@@ -56,6 +64,7 @@ class Jonda:
             cnt,xb = np.histogram(self.data,bins = self.bins,density = False)
             err = 1/np.sqrt(cnt)
             if inplace:
+                self.cnt = cnt
                 self.err = h*err
 
         xy = np.stack([xb[:-1]+np.diff(xb)/2,h])
