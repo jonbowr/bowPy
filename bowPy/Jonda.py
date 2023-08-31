@@ -115,11 +115,11 @@ class Jonda:
             ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*100)
         return(ex,self(ex))        
 
-    def show(self,fig = None,ax = None):
+    def show(self,fig = None,ax = None,label = None):
         from matplotlib import pyplot as plt
         if ax == None:
             fig,ax = plt.subplots()
-        lin = ax.plot(*self.xy)[0]
+        lin = ax.plot(*self.xy,label = label)[0]
         if self.f != None:
-            ax.plot(*self.get_fxy(),color = lin.get_color(),label = 'Fit')
+            ax.plot(*self.get_fxy(),color = lin.get_color())
 
