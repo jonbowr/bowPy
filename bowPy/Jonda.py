@@ -50,31 +50,31 @@ class Jonda:
                                 norm_binwidth = True,
                                 max_norm = True,
                                     cnt_err = True):
-        if bins != None:
-            self.bins = bins
-        h,xb = np.histogram(self.data,bins = self.bins,
-                            weights = self.weights,**params)
-        
-        if norm_binwidth:
-            h = h/np.diff(xb)
-        if max_norm:
-            h = h/np.nanmax(h)
+        with np.errstate(divide='ignore'):
+            if bins != None:
+                self.bins = bins
+            h,xb = np.histogram(self.data,bins = self.bins,
+                                weights = self.weights,**params)
+            
+            if norm_binwidth:
+                h = h/np.diff(xb)
+            if max_norm:
+                h = h/np.nanmax(h)
 
-        if cnt_err:
-            cnt,xb = np.histogram(self.data,bins = self.bins,density = False)
-            with np.errstate(divide='ignore'):
-                err = 1/np.sqrt(cnt)
+            if cnt_err:
+                cnt,xb = np.histogram(self.data,bins = self.bins,density = False)
+                    err = 1/np.sqrt(cnt)
+                if inplace:
+                    self.cnt = cnt
+                    self.err = h*err
+
+            xy = np.stack([xb[:-1]+np.diff(xb)/2,h])
             if inplace:
-                self.cnt = cnt
-                self.err = h*err
-
-        xy = np.stack([xb[:-1]+np.diff(xb)/2,h])
-        if inplace:
-            self.xy = xy
-            self.bins = xb
-            return(self)
-        else:
-            return(xy,err,xb)
+                self.xy = xy
+                self.bins = xb
+                return(self)
+            else:
+                return(xy,err,xb)
 
 
     def fit_xy(self,p_i = None,use_err = True,args = {},fy = lambda x: x):
