@@ -62,7 +62,8 @@ class Jonda:
 
         if cnt_err:
             cnt,xb = np.histogram(self.data,bins = self.bins,density = False)
-            err = 1/np.sqrt(cnt)
+            with np.errstate(divide='ignore'):
+                err = 1/np.sqrt(cnt)
             if inplace:
                 self.cnt = cnt
                 self.err = h*err
@@ -108,8 +109,11 @@ class Jonda:
         from .fitJon.f_eval import evals
         if ex == None: 
             ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*100)
-        return(evals[find](self.f,ex,self.p0))
-
+        try:
+            return(evals[find](self.f,ex,self.p0))
+        except:
+            print('eval failed')
+            return(np.nan)
     def get_fxy(self,ex = None):
         if ex == None: 
             ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*100)
