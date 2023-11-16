@@ -63,7 +63,7 @@ class Jonda:
 
             if cnt_err:
                 cnt,xb = np.histogram(self.data,bins = self.bins,density = False)
-                    err = 1/np.sqrt(cnt)
+                err = 1/np.sqrt(cnt)
                 if inplace:
                     self.cnt = cnt
                     self.err = h*err
