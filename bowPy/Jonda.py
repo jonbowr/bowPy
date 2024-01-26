@@ -99,9 +99,8 @@ class Jonda:
             self.covs = covs
             self.f = self.func
         else:
-            nano = ~np.sum(np.isnan(np.concatenate([self.xy,self.err.reshape(1,-1)])),axis = 0).flatten().astype(bool)
+            nano = ~np.sum(np.isnan(self.xy),axis = 0).flatten().astype(bool)
             params,covs = cf(self.func,*self.xy[:,nano],p0 = p_i,**args)
-            print('lekjfdslkj')
             self.p0 = params
             self.covs = covs
             self.f = self.func
