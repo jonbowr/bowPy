@@ -28,7 +28,8 @@ class Jonda:
 
 
         if type(func) == str: 
-            self.func = fc.funcs[func]['f']
+            # self.func = fc.funcs[func]['f']
+            self.func = fc.func(func)
             self.p_i = fc.p0_xy[func]
             self.p0_xy = fc.p0_xy[func]
         else:
@@ -97,6 +98,13 @@ class Jonda:
             self.p0 = params
             self.covs = covs
             self.f = self.func
+        else:
+            nano = ~np.sum(np.isnan(np.concatenate([self.xy,self.err.reshape(1,-1)])),axis = 0).flatten().astype(bool)
+            params,covs = cf(self.func,*self.xy[:,nano],p0 = p_i,**args)
+            print('lekjfdslkj')
+            self.p0 = params
+            self.covs = covs
+            self.f = self.func
 
     def interp_xy(self, kind = 'linear',sigma = 1):
         self.f = interp1d(self.xy[0,:],
@@ -119,11 +127,22 @@ class Jonda:
             ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*100)
         return(ex,self(ex))        
 
-    def show(self,fig = None,ax = None,label = None):
+    def show(self,fig = None,ax = None,label = None,marker = None):
         from matplotlib import pyplot as plt
         if ax == None:
             fig,ax = plt.subplots()
-        lin = ax.plot(*self.xy,label = label)[0]
+        if self.err is None:
+            lin = ax.plot(*self.xy,label = label)[0]
+        else:
+            lin = ax.errorbar(*self.xy,self.err,label = label)[0]
+
         if self.f != None:
-            ax.plot(*self.get_fxy(),color = lin.get_color())
+            lin.set(linestyle = '')
+            lin.set(marker = '.')
+            ax.plot(*self.get_fxy(),color = lin.get_color(),alpha = .75)
+        
+        if marker is not None:
+            lin.set(marker = marker)
+
+        return(fig,ax)
 

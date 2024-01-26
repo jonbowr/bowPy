@@ -7,9 +7,8 @@ def vline(x,txt = '',txt_props = {},
                         col = None,rot = 45,sep = .05):
     
     bbox=dict(boxstyle="round",
-                alpha = .2,
+                alpha = 1,
                 fc = col,
-                # ha= 'center',
                 # va = 'center'
                    # ec=(1., 0.5, 0.5),
                    # fc=(1., 0.8, 0.8),
@@ -20,6 +19,7 @@ def vline(x,txt = '',txt_props = {},
             txt,
             rotation = (rot if 'top' in text_loc else -rot),
             rotation_mode = 'anchor',
+            # horizontalalignment = 'left' if rot<90 else 'right',
             bbox = bbox,
             # transform=ax.transAxes,
             **txt_props)

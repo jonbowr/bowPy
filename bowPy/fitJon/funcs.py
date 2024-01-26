@@ -228,12 +228,13 @@ class func:
             return(self.f(x,*p0))
 
     def f_txt(self):
-        return('\n'.join(['%s'%self.info[s] for s in ['name','latex']]))
+        return(self.info['latex'])
 
     def p_txt(self,style = '%2.2e'):
         return('\n'.join([('%s='+style)%(n,p) for n,p in zip(self.info['params'],self.p)]))
 
-    def to_txt(self,p_style = '%2.2e'):
+
+    def pretty_txt(self,p_style = '%2.2e'):
         return('%s\n%s'%(self.f_txt(),self.p_txt(p_style)))
 
 
