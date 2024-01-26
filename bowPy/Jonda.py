@@ -28,8 +28,8 @@ class Jonda:
 
 
         if type(func) == str: 
-            # self.func = fc.funcs[func]['f']
-            self.func = fc.func(func)
+            self.func = fc.funcs[func]['f']
+            # self.func = fc.func(func)
             self.p_i = fc.p0_xy[func]
             self.p0_xy = fc.p0_xy[func]
         else:
