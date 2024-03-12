@@ -29,7 +29,7 @@ class Jonda:
 
         if type(func) == str: 
             self.func = fc.funcs[func]['f']
-            # self.func = fc.func(func)
+            self.func_func = fc.func(func)
             self.p_i = fc.p0_xy[func]
             self.p0_xy = fc.p0_xy[func]
         else:
@@ -121,9 +121,10 @@ class Jonda:
         except:
             print('eval failed')
             return(np.nan)
-    def get_fxy(self,ex = None):
+    def get_fxy(self,ex = None,buffer = .2):
         if ex == None: 
-            ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*100)
+            ex = np.linspace(np.nanmin(self.xy[0,:])*(1-buffer),
+                             np.nanmax(self.xy[0,:])*(1+buffer),len(self.xy[0,:])*100)
         return(ex,self(ex))        
 
     def show(self,fig = None,ax = None,label = None,marker = None):
