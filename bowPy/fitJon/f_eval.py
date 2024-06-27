@@ -46,4 +46,5 @@ def peak(fit,ex,param = [],peaknness = True):
 evals = {
   'fwhm':fwhm,
   'peak':peak,
+  'de_e':lambda fit,ex:fwhm(fit,ex)/peak(fi,ex),
 }

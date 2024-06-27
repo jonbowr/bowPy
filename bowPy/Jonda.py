@@ -46,13 +46,33 @@ class Jonda:
     def __repr__(self):
         return(str(self))
 
+    def copy(self):
+        thing = Jonda()
+        if self.data is not None:
+            thing.data = self.data.copy()
+        if self.xy is not None:
+            thing.xy = self.xy.copy()
+        if self.err is not None:
+            thing.err = self.err.copy()
+        if self.weights is not None:
+            thing.weights = self.weights.copy()
+        if self.func is not None:
+            thing.func = self.func
+        if self.p0 is not None:
+            thing.p0 = self.p0.copy()
+        if self.f is not None:
+            thing.f = self.f
+        if self.cnt is not None:
+            thing.cnt = self.cnt.copy()
+        return(thing)
+
     def bin_data(self,bins= None,inplace = True,
                             params = {},
                                 norm_binwidth = True,
                                 max_norm = True,
                                     cnt_err = True):
         with np.errstate(divide='ignore'):
-            if bins != None:
+            if bins is not None:
                 self.bins = bins
             h,xb = np.histogram(self.data,bins = self.bins,
                                 weights = self.weights,**params)
@@ -121,6 +141,7 @@ class Jonda:
         except:
             print('eval failed')
             return(np.nan)
+
     def get_fxy(self,ex = None):
         if ex == None: 
             ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*100)
@@ -145,3 +166,14 @@ class Jonda:
 
         return(fig,ax)
 
+
+    def sample(self,n,a=0,b=1,ab_rng = 'norm'):
+        if ab_rng == 'norm':
+            aa,bb = self.xy[0,[0,-1]]
+        else:
+            aa = a
+            bb = b
+        x = np.random.rand(n)*(bb-aa)+aa
+        y = self(x)
+        select = np.repeat(x,abs(y/(max(y)-min(y))*np.log(n)**3).astype(int))
+        return(np.random.choice(select, n))
