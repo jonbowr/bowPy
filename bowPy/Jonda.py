@@ -29,7 +29,7 @@ class Jonda:
 
         if type(func) == str: 
             self.func = fc.funcs[func]['f']
-            # self.func = fc.func(func)
+            self.func_func = fc.func(func)
             self.p_i = fc.p0_xy[func]
             self.p0_xy = fc.p0_xy[func]
         else:
@@ -142,9 +142,10 @@ class Jonda:
             print('eval failed')
             return(np.nan)
 
-    def get_fxy(self,ex = None):
+    def get_fxy(self,ex = None,buffer = .2):
         if ex == None: 
-            ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*100)
+            ex = np.linspace(np.nanmin(self.xy[0,:])*(1-buffer),
+                             np.nanmax(self.xy[0,:])*(1+buffer),len(self.xy[0,:])*100)
         return(ex,self(ex))        
 
     def show(self,fig = None,ax = None,label = None,marker = None):
@@ -166,6 +167,17 @@ class Jonda:
 
         return(fig,ax)
 
+
+    def sample(self,n,a=0,b=1,ab_rng = 'norm'):
+        if ab_rng == 'norm':
+            aa,bb = self.xy[0,[0,-1]]
+        else:
+            aa = a
+            bb = b
+        x = np.random.rand(n)*(bb-aa)+aa
+        y = self(x)
+        select = np.repeat(x,abs(y/(max(y)-min(y))*np.log(n)**3).astype(int))
+        return(np.random.choice(select, n))
 
     def sample(self,n,a=0,b=1,ab_rng = 'norm'):
         if ab_rng == 'norm':
