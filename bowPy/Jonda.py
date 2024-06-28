@@ -142,6 +142,7 @@ class Jonda:
             print('eval failed')
             return(np.nan)
 
+            
     def get_fxy(self,ex = None,buffer = .2):
         if ex == None: 
             ex = np.linspace(np.nanmin(self.xy[0,:])*(1-buffer),
