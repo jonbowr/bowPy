@@ -4,10 +4,10 @@ from matplotlib import pyplot as plt
 def vline(x,txt = '',txt_props = {},
                         lineprops = {},ax = plt,
                         text_loc = 'top',
-                        col = None,rot = 45,sep = .05):
+                        col = None,rot = 45,sep = .05,alpha = 1):
     
     bbox=dict(boxstyle="round",
-                alpha = 1,
+                alpha = alpha,
                 fc = col,
                 # va = 'center'
                    # ec=(1., 0.5, 0.5),
