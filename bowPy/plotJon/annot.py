@@ -23,5 +23,5 @@ def vline(x,txt = '',txt_props = {},
             bbox = bbox,
             # transform=ax.transAxes,
             **txt_props)
-    ax.axvline(x,color = 'k',linewidth = 2)
+    # ax.axvline(x,color = 'k',linewidth = 2)
     ax.axvline(x,color = col,**lineprops)

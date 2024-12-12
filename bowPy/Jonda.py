@@ -125,10 +125,10 @@ class Jonda:
             self.covs = covs
             self.f = self.func
 
-    def interp_xy(self, kind = 'linear',sigma = 1):
+    def interp_xy(self, kind = 'linear',sigma = 1,bounds_error = False,interp_input = {}):
         self.f = interp1d(self.xy[0,:],
                           gf(self.xy[1,:],sigma = sigma),
-                          kind = kind,bounds_error = False)
+                          kind = kind,bounds_error = bounds_error,**interp_input)
         self.p0 = []
         return(self)
 

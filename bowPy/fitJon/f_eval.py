@@ -42,9 +42,14 @@ def peak(fit,ex,param = [],peaknness = True):
       m_peak_ind = peaks_ind[np.argmax(y[peaks_ind])]
       return(ex[m_peak_ind])
 
+def peak_height(fit,ex,param = []):
+    y = fit(ex,*param)
+    return(np.max(y))
+
 
 evals = {
   'fwhm':fwhm,
   'peak':peak,
   'de_e':lambda fit,ex:fwhm(fit,ex)/peak(fi,ex),
+  'peak_height':peak_height
 }

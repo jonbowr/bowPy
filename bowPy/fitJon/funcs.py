@@ -48,6 +48,9 @@ def kappa_3(x,h = .1,k = 0,l = 0,scale =1,a = 1):
     v = kappa3._pdf(x,h,k,l,scale)
     return(a*v)
 
+def nat_log(x,a = 1,b = 0,x0 = 0):
+    return(a * np.log(x+x0) + b)
+
 def power_law(x,a = 1,k = -1,y0 = 0,x0 = 0):
     return(a*(x-x0)**k+y0)
 
@@ -158,6 +161,14 @@ funcs = {
                     'params':['a','k','y0','x0'],
                     'reference':'',
                 },
+            'nat_log':
+               {
+                    'f':nat_log,
+                    'name':'Natural Log',
+                    'latex':r'',
+                    'params':['a','b','x0'],
+                    'reference':'',
+                },
             'linear':
                {
                     'f':linear,
@@ -198,6 +209,7 @@ p0_xy = {
       'kappa4':lambda x,y: [.1,-.1,np.average(x,weights=y),1,np.max(y),0],
       'kappa3':lambda x,y: [-.1,np.average(x,weights=y),1,np.max(y),0],
       'power_law':lambda x,y: [1]*4,
+      'nat_log':lambda x,y: [1,1,0],
       'linear':lambda x,y: [1,0],
       }
 
