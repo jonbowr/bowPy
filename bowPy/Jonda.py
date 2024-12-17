@@ -29,11 +29,11 @@ class Jonda:
 
         if type(func) == str: 
             self.func = fc.funcs[func]['f']
-            self.func_func = fc.func(func)
-            self.p_i = fc.p0_xy[func]
-            self.p0_xy = fc.p0_xy[func]
+            self.func_name = func
+            # self.p_i = fc.p0_xy[func]
         else:
             self.func = func
+            self.func_name = ''
 
     def __call__(self,x,p0 = None):
         if p0 == None: 
@@ -97,6 +97,8 @@ class Jonda:
             else:
                 return(xy,err,xb)
 
+    def guess_p0(self):
+        return(fc.p0_xy[self.func_name](*self.xy))
 
     def fit_xy(self,p_i = None,use_err = True,args = {},fy = lambda x: x):
         if p_i == None:

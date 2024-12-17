@@ -224,10 +224,12 @@ class func:
         if type(func) == str: 
             self.info = funcs[func]
             self.f = funcs[func]['f']
+            self.f_name = func
             # self.p0 = 
         else:
             self.f = func
             self.info = funcs['fx']
+            self.f_name = None
 
 
     def __call__(self,x,p0 = None):
@@ -250,5 +252,7 @@ class func:
         return('%s\n%s'%(self.f_txt(),self.p_txt(p_style)))
 
 
+    def guess_pi(self,x,y):
+        return(p0_xy[self.f_name](x,y))
 
 
