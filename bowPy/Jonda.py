@@ -14,7 +14,9 @@ class Jonda:
                      func = None,
                      p0 = None,
                      bins = None,
-                     covs = None):
+                     covs = None,
+                     xy_labs = [],
+                     info = ''):
 
         self.data = data
         self.xy = xy_data
@@ -25,6 +27,14 @@ class Jonda:
         self.covs = covs
         self.f = None
         self.cnt = None
+        self.xy_labs = xy_labs
+        self.info = info
+        import datetime
+        # Get current datetime object
+        now = datetime.datetime.now()
+        # Convert to string
+        datetime_string = now.strftime("%Y%m%d-%H%M%S")
+        self.info_time = datetime_string
 
 
         if type(func) == str: 
