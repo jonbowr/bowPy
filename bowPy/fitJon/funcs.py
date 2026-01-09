@@ -57,6 +57,15 @@ def power_law(x,a = 1,k = -1,y0 = 0,x0 = 0):
 def linear(x,m=1,b=1):
     return(m*x+b)
 
+def gauss_flip_flop(x,a=1,x0=0,sigma1=1,sigma2=1):
+        return(a*np.exp(-(x-x0)**2/sigma1**2/2)*np.heaviside(x0-x,.5)+
+                 a*np.exp(-(x0-x)**2/sigma2**2/2)*np.heaviside(x-x0,.5))
+
+def gauss_asym(E,a=1,Ec=0,En=1,Ep=1):
+    delta1 = 2*(1-En/Ec)
+    delta2 = 2*(1-Ec/Ep)
+    return(a*np.exp(-4*np.log(2)*(E/Ec-1)**2/delta1**2)*np.heaviside(Ec-E,.5)+
+                 a*np.exp(-4*np.log(2)*(Ec/E-1)**2/delta2**2)*np.heaviside(E-Ec,.5))
 
 # funcs = {
 #           'gauss':gauss,
@@ -85,7 +94,7 @@ funcs = {
                 {
                     'f':gauss,
                     'name':'Gaussian Distribution',
-                    'latex':r'$a*e^{\dfrac{-(x-x0)^2}{2*\sigma**2}',
+                    'latex':r'$a*e^{\dfrac{-(x-x0)^2}{2*\sigma^2}',
                     'params':['a','x0','sigma'],
                     'reference':'',
                 },    
@@ -93,7 +102,7 @@ funcs = {
                {
                     'f':log_gauss,
                     'name':'',
-                    'latex':r'',
+                    'latex':r'a*(x*\sigma*\sqrt{2*\pi})^{-1}\exp{-(\log(x) - \mu)^2/(2\sigma^2)}',
                     'params':[],
                     'reference':'',
                 },
@@ -177,6 +186,22 @@ funcs = {
                     'params':['m','b'],
                     'reference':'',
                 },
+            'gauss_flip_flop':
+               {
+                    'f':gauss_flip_flop,
+                    'name':'Assymetric Gaussian',
+                    'latex':r'$$',
+                    'params':['a','x0','sigma1','sigma2'],
+                    'reference':'',
+                },
+            'gauss_asym':
+               {
+                    'f':gauss_asym,
+                    'name':'Assymetric Gaussian',
+                    'latex':r'$$',
+                    'params':['a','Ec','En','Ep'],
+                    'reference':'',
+                },
         }
 
 # p0 = {
@@ -202,8 +227,8 @@ p0_xy = {
       'log_trunk_gauss': lambda x,y: [np.max(y),
                             np.average(x,weights=y),
                             np.nanmin(x),np.nanmax(x),
-                            np.average(x,weights=y)-2*np.std_w(x,y),
-                                np.std_w(x,y)],
+                            np.average(x,weights=y)-2*std_w(x,y),
+                                std_w(x,y)],
       'skew_gauss':lambda x,y: None,
       'skew_trunk_gauss':lambda x,y: None,
       'kappa4':lambda x,y: [.1,-.1,np.average(x,weights=y),1,np.max(y),0],
@@ -211,6 +236,8 @@ p0_xy = {
       'power_law':lambda x,y: [1]*4,
       'nat_log':lambda x,y: [1,1,0],
       'linear':lambda x,y: [1,0],
+      'gauss_flip_flop': lambda x,y: [np.max(y),np.average(x,weights=y),np.average(x,weights=y),np.average(x,weights=y)],
+      'gauss_asym': lambda x,y: [np.max(y),np.average(x,weights=y),np.average(x,weights=y),np.average(x,weights=y)],
       }
 
 

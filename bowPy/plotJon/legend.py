@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 from matplotlib import container
 
 
-def legend_loc(fig,ax,label = '',location = 'right',size = '10%',pad = .05):
+def legend_loc(fig,ax,label = '',location = 'right',size = '10%',pad = .1):
 
     # get handles
     handles, labels = ax.get_legend_handles_labels()

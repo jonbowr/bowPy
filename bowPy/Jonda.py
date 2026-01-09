@@ -17,7 +17,21 @@ class Jonda:
                      covs = None,
                      xy_labs = [],
                      info = ''):
+        '''Jonda
 
+        properties:
+            self.data = data
+            self.xy = xy_data
+            self.err = err
+            self.weights = weights
+            self.bins = bins
+            self.p0 = p0
+            self.covs = covs
+            self.f = None
+            self.cnt = None
+            self.func = fc.funcs[func]['f']
+            self.func_name = func
+        '''
         self.data = data
         self.xy = xy_data
         self.err = err
@@ -111,7 +125,7 @@ class Jonda:
         return(fc.p0_xy[self.func_name](*self.xy))
 
     def fit_xy(self,p_i = None,use_err = True,args = {},fy = lambda x: x):
-        if p_i == None:
+        if p_i is None:
             # p_i = self.p_i(*self.xy)
             try:
                 params,covs = cf(self.func,self.xy[0],fy(self.xy[1]),**args)
@@ -125,7 +139,7 @@ class Jonda:
                 # self.f = lambda x: np.nan
                 self.f = self.func
         if use_err:
-            nano = ~np.sum(np.isnan(np.concatenate([self.xy,self.err.reshape(1,-1)])),axis = 0).flatten().astype(bool)
+            nano = ~np.sum(np.isnan(np.concatenate([self.xy,self.err])),axis = 0).flatten().astype(bool)
             params,covs = cf(self.func,*self.xy[:,nano],p0 = p_i,sigma = self.err[nano],**args)
             self.p0 = params
             self.covs = covs
@@ -144,7 +158,8 @@ class Jonda:
                             kind = kind,bounds_error = bounds_error,**interp_input)
         else:
             from scipy.interpolate import UnivariateSpline
-            self.f = UnivariateSpline(*self.xy,s = sigma)
+            self.f = UnivariateSpline(self.xy[0,:],
+                            gf(self.xy[1,:],sigma = sigma),s = sigma,**interp_input)
         self.p0 = []
         return(self)
 
