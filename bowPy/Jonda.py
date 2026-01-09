@@ -138,9 +138,13 @@ class Jonda:
             self.f = self.func
 
     def interp_xy(self, kind = 'linear',sigma = 1,bounds_error = False,interp_input = {}):
-        self.f = interp1d(self.xy[0,:],
-                          gf(self.xy[1,:],sigma = sigma),
-                          kind = kind,bounds_error = bounds_error,**interp_input)
+        if kind != 'spline':
+            self.f = interp1d(self.xy[0,:],
+                            gf(self.xy[1,:],sigma = sigma),
+                            kind = kind,bounds_error = bounds_error,**interp_input)
+        else:
+            from scipy.interpolate import UnivariateSpline
+            self.f = UnivariateSpline(*self.xy,s = sigma)
         self.p0 = []
         return(self)
 
