@@ -144,7 +144,8 @@ class Jonda:
                             kind = kind,bounds_error = bounds_error,**interp_input)
         else:
             from scipy.interpolate import UnivariateSpline
-            self.f = UnivariateSpline(*self.xy,s = sigma)
+            self.f = UnivariateSpline(self.xy[0,:],
+                                gf(self.xy[1,:],sigma = sigma),**interp_input)
         self.p0 = []
         return(self)
 
