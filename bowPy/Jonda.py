@@ -126,32 +126,37 @@ class Jonda:
 
     def fit_xy(self,p_i = None,use_err = True,args = {},fy = lambda x: x):
         if p_i is None:
+            try:
+                p_i = self.guess_p0()
+            except:
+                pass
             # p_i = self.p_i(*self.xy)
             try:
-                params,covs = cf(self.func,self.xy[0],fy(self.xy[1]),**args)
-                self.p0 = params
-                self.covs = covs
-                self.f = self.func
+                # params,covs = cf(self.func,self.xy[0],fy(self.xy[1]),**args)
+                # self.p0 = params
+                # self.covs = covs
+                # self.f = self.func
+                if use_err:
+                    nano_xy = ~np.sum(np.isnan(self.xy),axis = 0).flatten().astype(bool)
+                    nano_err = ~np.isnan(self.err).flatten().astype(bool)
+                    nano = nano_xy & nano_err
+                    params,covs = cf(self.func,*self.xy[:,nano],p0 = p_i,sigma = self.err[nano],**args)
+                    self.p0 = params
+                    self.covs = covs
+                    self.f = self.func
+                else:
+                    nano = ~np.sum(np.isnan(self.xy),axis = 0).flatten().astype(bool)
+                    params,covs = cf(self.func,*self.xy[:,nano],p0 = p_i,**args)
+                    self.p0 = params
+                    self.covs = covs
+                    self.f = self.func
             except:
                 print('Curve Fit Failed')
                 params = [np.nan]*len(self.p0)
                 covs = None
                 # self.f = lambda x: np.nan
                 self.f = self.func
-        if use_err:
-            nano_xy = ~np.sum(np.isnan(self.xy),axis = 0).flatten().astype(bool)
-            nano_err = ~np.isnan(self.err).flatten().astype(bool)
-            nano = nano_xy & nano_err
-            params,covs = cf(self.func,*self.xy[:,nano],p0 = p_i,sigma = self.err[nano],**args)
-            self.p0 = params
-            self.covs = covs
-            self.f = self.func
-        else:
-            nano = ~np.sum(np.isnan(self.xy),axis = 0).flatten().astype(bool)
-            params,covs = cf(self.func,*self.xy[:,nano],p0 = p_i,**args)
-            self.p0 = params
-            self.covs = covs
-            self.f = self.func
+
 
     def interp_xy(self, kind = 'linear',sigma = 1,bounds_error = False,interp_input = {}):
         if kind != 'spline':
