@@ -139,7 +139,9 @@ class Jonda:
                 # self.f = lambda x: np.nan
                 self.f = self.func
         if use_err:
-            nano = ~np.sum(np.isnan(np.concatenate([self.xy,self.err])),axis = 0).flatten().astype(bool)
+            nano_xy = ~np.sum(np.isnan(self.xy),axis = 0).flatten().astype(bool)
+            nano_err = ~np.isnan(self.err).flatten().astype(bool)
+            nano = nano_xy & nano_err
             params,covs = cf(self.func,*self.xy[:,nano],p0 = p_i,sigma = self.err[nano],**args)
             self.p0 = params
             self.covs = covs
