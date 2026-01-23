@@ -46,10 +46,27 @@ def peak_height(fit,ex,param = []):
     y = fit(ex,*param)
     return(np.max(y))
 
+def x_intercept(fit,ex,param = []):
+    y = fit(ex,*param)
+    try:
+        # x0 = ex[find_nearest(y,0)]
+        x0 = ex[y<0]        
+        if len(x0)>0:
+           if np.gradient(y)[y<0].mean()>0:
+              x0 = x0[-1]
+           else: 
+              x0 = x0[0]
+        else:
+           x0 = np.nan
+    except:
+        x0 = np.nan
+    return(x0)
+
 
 evals = {
   'fwhm':fwhm,
   'peak':peak,
   'de_e':lambda fit,ex:fwhm(fit,ex)/peak(fi,ex),
-  'peak_height':peak_height
+  'peak_height':peak_height,
+  'x_intercept':x_intercept
 }
