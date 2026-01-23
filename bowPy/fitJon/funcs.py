@@ -221,7 +221,7 @@ funcs = {
 p0_xy = {
         'fx':lambda x,y: [],
       'gauss': lambda x,y: [np.max(y),np.average(x,weights=y),np.average(x,weights=y)],
-      'log_gauss':lambda x,y: None,
+      'log_gauss':lambda x,y: [np.max(y),np.average(x,weights=y),np.average(x,weights=y)],
       'tanh':None,
       'log_gauss_flip': lambda x,y: [np.max(y),np.average(x,weights=y),np.nanmin(x),np.nanmax(x)],
       'log_trunk_gauss': lambda x,y: [np.max(y),
