@@ -128,8 +128,10 @@ class Jonda:
         if p_i is None:
             try:
                 p_i = self.guess_p0()
+                print(p_i)
             except:
-                pass
+                print('p0 guess failed')
+                # pass
             # p_i = self.p_i(*self.xy)
             try:
                 # params,covs = cf(self.func,self.xy[0],fy(self.xy[1]),**args)
@@ -172,7 +174,7 @@ class Jonda:
 
     def find_xy(self, find = 'fwhm',ex = None):
         from .fitJon.f_eval import evals
-        if ex == None: 
+        if ex is None: 
             ex = np.linspace(np.nanmin(self.xy[0,:]),np.nanmax(self.xy[0,:]),len(self.xy[0,:])*100)
         try:
             return(evals[find](self.f,ex,self.p0))
